@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Bébert — Dictionnaire de l'argot français</title>
+<meta name="description" content="Le Bébert, le dictionnaire de l'argot français : verlan, argot ancien, argot des jeunes, expressions populaires, avec définitions, exemples et origines.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4ecdc; --paper:#fbf6ea; --ink:#1f1a14; --muted:#6d6252; --line:#d9ccb2;
+  --accent:#b3261e; --accent-soft:#f3d9d3; --chip:#ece2cc; --shadow:0 1px 0 rgba(0,0,0,.04),0 6px 20px rgba(60,40,10,.07);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16130f; --paper:#1f1b16; --ink:#efe6d4; --muted:#a69a85; --line:#3a3229;
+    --accent:#e2574c; --accent-soft:#3b1f1b; --chip:#2a241d; --shadow:0 6px 20px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16130f; --paper:#1f1b16; --ink:#efe6d4; --muted:#a69a85; --line:#3a3229;
+  --accent:#e2574c; --accent-soft:#3b1f1b; --chip:#2a241d; --shadow:0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;font-size:16px;line-height:1.55}
+a{color:inherit}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+
+header.hero{padding:48px 0 24px;text-align:center;border-bottom:3px double var(--line)}
+.hero .kicker{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-family:"Playfair Display",Georgia,serif;font-weight:900;font-size:clamp(3rem,11vw,6rem);line-height:1;margin:.15em 0 .15em;letter-spacing:-.01em}
+.hero h1 .le{font-weight:400;font-style:italic;color:var(--accent)}
+.hero p{font-family:"Playfair Display",Georgia,serif;font-style:italic;color:var(--muted);margin:0;font-size:1.1rem}
+.hero .def{max-width:560px;margin:18px auto 0;font-size:.95rem;color:var(--muted)}
+.hero .def b{font-family:"Playfair Display",serif;color:var(--ink)}
+
+.toolbar{position:sticky;top:0;z-index:10;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
+.searchrow{display:flex;gap:8px}
+.search{flex:1;display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 14px;box-shadow:var(--shadow)}
+.search input{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:1.05rem;padding:12px 0;outline:none;min-width:0}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:0 14px;font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.alpha{display:flex;flex-wrap:wrap;gap:2px;margin-top:10px;justify-content:center}
+.alpha button{border:0;background:transparent;color:var(--muted);font-family:"Playfair Display",serif;font-weight:600;font-size:1rem;width:30px;height:30px;border-radius:8px;cursor:pointer}
+.alpha button:hover{color:var(--ink);background:var(--chip)}
+.alpha button.on{background:var(--accent);color:#fff}
+.alpha button:disabled{opacity:.25;cursor:default;background:transparent}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px;scrollbar-width:thin}
+.chip{flex:none;border:1px solid transparent;background:var(--chip);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--paper)}
+.chip small{color:var(--muted);margin-left:4px}
+.chip.on small{color:inherit;opacity:.7}
+
+.featured{display:grid;grid-template-columns:1fr;gap:14px;margin:24px 0 8px;max-width:560px}
+@media (max-width:700px){.featured{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow)}
+.card .label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.card.new{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-soft),var(--paper) 70%)}
+
+.meta{display:flex;justify-content:space-between;align-items:baseline;margin:22px 0 6px;color:var(--muted);font-size:.9rem}
+.list{columns:2;column-gap:36px}
+@media (max-width:760px){.list{columns:1}}
+.letter{font-family:"Playfair Display",serif;font-weight:800;font-size:2.4rem;color:var(--accent);margin:18px 0 4px;break-after:avoid;border-bottom:1px solid var(--line);line-height:1.2}
+.entry{break-inside:avoid;padding:10px 0 12px;border-bottom:1px dotted var(--line)}
+.entry:target{background:var(--accent-soft);border-radius:8px;padding-left:8px;padding-right:8px}
+.hw{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:1.25rem;text-decoration:none}
+.hw:hover{color:var(--accent)}
+.gram{font-family:"Playfair Display",serif;font-style:italic;color:var(--muted);margin-left:6px;font-size:.95rem}
+.d{margin:3px 0 0}
+.ex{margin:4px 0 0;font-family:"Playfair Display",serif;font-style:italic;color:var(--ink);opacity:.85}
+.ex::before{content:"« "}.ex::after{content:" »"}
+.or{margin:5px 0 0;font-size:.82rem;color:var(--muted)}
+.or b{font-weight:600}
+.tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:.7rem;background:var(--chip);color:var(--muted);border-radius:6px;padding:1px 7px;cursor:pointer;border:0;font-family:inherit}
+.tag:hover{color:var(--accent)}
+.badge{display:inline-block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;background:var(--accent);color:#fff;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:3px;font-weight:600}
+mark{background:var(--accent-soft);color:inherit;border-radius:3px;padding:0 1px}
+.empty{text-align:center;padding:48px 0;color:var(--muted);font-family:"Playfair Display",serif;font-style:italic;font-size:1.1rem}
+
+footer{margin-top:48px;padding:28px 0 40px;border-top:3px double var(--line);color:var(--muted);font-size:.88rem;text-align:center}
+footer .legend{max-width:620px;margin:0 auto 14px;text-align:left}
+footer .legend dt{font-weight:600;color:var(--ink);display:inline}
+footer .legend dd{display:inline;margin:0 12px 0 4px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:.9rem;transition:transform .25s;z-index:20}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.theme-toggle{position:absolute;top:14px;right:16px}
+.top{position:relative}
+</style>
+</head>
+<body>
+<div class="top">
+<button class="btn theme-toggle" id="themeBtn" aria-label="Changer de thème" style="height:38px">◐</button>
+<header class="hero wrap">
+  <div class="kicker">Dictionnaire de l'argot français</div>
+  <h1><span class="le">Le</span> Bébert</h1>
+  <p>Verlan, argot de la rue, du milieu, des jeunes et des anciens</p>
+  <div class="def"><b>Le Bébert</b> <i>n.m.</i> — Diminutif populaire d'Albert ou de Robert ; par extension, le Français moyen, gouailleur et sans chichis. C'est lui qui cause ici.</div>
+</header>
+</div>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="searchrow">
+      <label class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Chercher un mot, une définition…" autocomplete="off" aria-label="Rechercher">
+      </label>
+      <button class="btn" id="randBtn" title="Un mot au hasard">🎲 Au hasard</button>
+    </div>
+    <div class="alpha" id="alpha"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="featured" id="featured"></section>
+  <div class="meta"><span id="count"></span><a href="#" id="reset" style="display:none">Tout afficher</a></div>
+  <section class="list" id="list"></section>
+</main>
+
+<footer class="wrap">
+  <dl class="legend">
+    <dt>n.m.</dt><dd>nom masculin</dd><dt>n.f.</dt><dd>nom féminin</dd><dt>v.</dt><dd>verbe</dd><dt>adj.</dt><dd>adjectif</dd><dt>adv.</dt><dd>adverbe</dd><dt>loc.</dt><dd>locution</dd><dt>interj.</dt><dd>interjection</dd><dt>acron.</dt><dd>acronyme</dd>
+  </dl>
+  <p>Le Bébert — dictionnaire libre de l'argot français · 2026</p>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- DONNÉES ----------
+   Format : [mot, catégorie grammaticale, définition, exemple, [thèmes], origine (facultatif), options (facultatif)]
+   Pour ajouter un mot, il suffit d'ajouter une ligne dans ce tableau. */
+const D = [
+// Ajout récent
+["F.D.O","acron.","« Fieffé dingue ordurier » : injure familière manifestant son indignation, notamment contre les nazillons traîtres à la Patrie. Acronyme utilisé en ligne, dans toute la France depuis 2016.","Ce F.D.O a encore tagué la mairie !",["insultes","acronymes"],"Sigle de « fieffé dingue ordurier »."],
+["F.D.P","acron.","« Fils de pute » : injure très grossière, très répandue en ligne (messages, commentaires, jeux vidéo).","Il m'a traité de FDP dans le chat du jeu.",["insultes","acronymes","jeunes"],"Sigle de « fils de pute »."],
+["Bébert","n.m.","Diminutif populaire d'Albert ou de Robert ; par extension, le Français moyen, gouailleur et sans chichis.","Bébert, au comptoir, refaisait le monde.",["personnes"]],
+
+// Argent
+["blé","n.m.","Argent.","Il a du blé plein les poches.",["argent"]],
+["oseille","n.f.","Argent.","Faut ramener l'oseille avant vendredi.",["argent"]],
+["pognon","n.m.","Argent.","Ils se sont fait un pognon de dingue.",["argent"]],
+["fric","n.m.","Argent.","T'aurais pas un peu de fric à me prêter ?",["argent"]],
+["thune","n.f.","Argent ; à l'origine, pièce de cinq francs.","J'ai plus une thune.",["argent"]],
+["flouze","n.m.","Argent.","Le flouze, c'est pas tout dans la vie.",["argent"]],
+["pèze","n.m.","Argent.","Il a du pèze, le vieux.",["argent","ancien"]],
+["radis","n.m.","Sou ; surtout dans « pas un radis » : pas d'argent du tout.","J'ai pas un radis jusqu'à la fin du mois.",["argent"]],
+["balle","n.f.","Franc, puis euro (souvent au pluriel).","Ça m'a coûté cinquante balles.",["argent"]],
+["bifton / biffeton","n.m.","Billet de banque.","Il a sorti un bifton de vingt.",["argent"]],
+["brique","n.f.","Dix mille francs (un million d'anciens francs) ; grosse somme.","Il a touché trois briques.",["argent","ancien"]],
+["patate","n.f.","Somme de dix mille (francs, puis euros) ; grosse somme.","La bagnole lui a coûté dix patates.",["argent"]],
+["moula","n.f.","Argent (argot récent, venu du rap).","Il ne pense qu'à la moula.",["argent","jeunes"]],
+["maille","n.f.","Argent.","Faire de la maille.",["argent","jeunes"],"La maille était une petite monnaie médiévale (cf. « avoir maille à partir »)."],
+["fauché","adj.","Sans argent.","Je suis fauché comme les blés.",["argent","qualificatifs"]],
+["raide","adj.","Sans un sou.","Je suis raide jusqu'au 5.",["argent"]],
+["blindé","adj.","Très riche.","Son daron est blindé.",["argent"]],
+["raquer","v.","Payer, souvent à contrecœur.","C'est encore moi qui vais raquer.",["argent","actions"]],
+["casquer","v.","Payer.","Il a dû casquer pour les réparations.",["argent","actions"]],
+["taper","v.","Emprunter de l'argent à quelqu'un.","Il m'a tapé de vingt euros.",["argent","actions"]],
+["douloureuse","n.f.","L'addition, la note à payer.","Garçon, la douloureuse !",["argent"]],
+["clopinettes","n.f.pl.","Presque rien.","Il bosse pour des clopinettes.",["argent","expressions"]],
+["peanuts","n.f.pl.","Somme dérisoire.","Il gagne des peanuts.",["argent","expressions"],"De l'anglais, « cacahuètes »."],
+["reuch","adj.","Cher.","C'est reuch, ce resto.",["argent","verlan"],"Verlan de « cher »."],
+["radin / rapiat","adj. et n.","Avare.","Rapiat comme pas deux.",["argent","personnes"]],
+
+// Police & justice
+["flic","n.m.","Policier.","Les flics sont arrivés en deux minutes.",["police"]],
+["keuf","n.m.","Policier.","Fais gaffe, y a les keufs.",["police","verlan"],"Verlan de « flic »."],
+["poulet","n.m.","Policier.","Deux poulets en civil l'attendaient.",["police"]],
+["condé","n.m.","Policier ; autrefois, autorisation tacite accordée par la police.","C'est un ancien condé.",["police","ancien"]],
+["schmitt","n.m.","Policier.","Les schmitts ont bouclé la rue.",["police"]],
+["poulaga / poulaille","n.f.","La police (collectif).","La poulaga débarque.",["police"]],
+["bœuf-carotte","n.m.","Inspecteur de la police des polices (IGS, IGPN).","Les bœufs-carottes l'ont cuisiné toute la journée.",["police"],"Parce qu'ils laissent « mijoter » longtemps leurs interrogés."],
+["pandore","n.m.","Gendarme (vieilli, ironique).","Les pandores patrouillaient sur la nationale.",["police","ancien"]],
+["cogne","n.m.","Gendarme, policier (vieilli).","Les cognes l'ont alpagué.",["police","ancien"]],
+["panier à salade","n.m.","Fourgon de police.","On l'a embarqué dans le panier à salade.",["police","expressions"]],
+["taule / tôle","n.f.","Prison.","Il a fait deux ans de taule.",["police"]],
+["zonzon","n.f.","Prison.","Il sort de zonzon la semaine prochaine.",["police"]],
+["placard","n.m.","Prison ; aussi, poste sans responsabilité où l'on met quelqu'un à l'écart.","Il est au placard depuis la réorganisation.",["police","travail"]],
+["mitard","n.m.","Cellule disciplinaire en prison.","Huit jours de mitard.",["police"]],
+["maton","n.m.","Gardien de prison.","Les matons font leur ronde.",["police"]],
+["balance","n.f.","Dénonciateur, mouchard.","C'est une balance, ne lui dis rien.",["police","insultes"]],
+["poucave","n.f.","Mouchard, rapporteur (argot récent).","Arrête de faire la poucave.",["police","jeunes","insultes"]],
+["indic","n.m.","Indicateur de police.","Il était l'indic du commissaire.",["police"]],
+["se faire serrer","loc.","Se faire arrêter.","Il s'est fait serrer à la frontière.",["police","actions"]],
+["alpaguer","v.","Arrêter, interpeller quelqu'un.","Il s'est fait alpaguer en sortant du bar.",["police","actions"]],
+["ripou","n.m. et adj.","Policier corrompu.","Un flic ripou.",["police","verlan"],"Verlan de « pourri », popularisé par le film Les Ripoux (1984)."],
+["flingue","n.m.","Arme à feu, pistolet.","Il a sorti un flingue.",["objets","police"]],
+
+// Personnes
+["mec","n.m.","Homme, type ; petit ami.","C'est un mec bien.",["personnes"]],
+["meuf","n.f.","Femme ; petite amie.","Il est venu avec sa meuf.",["personnes","verlan"],"Verlan de « femme »."],
+["keum","n.m.","Homme, mec.","C'est qui ce keum ?",["personnes","verlan"],"Verlan de « mec »."],
+["gonze / gonzesse","n.","Homme / femme (« gonze » est vieilli).","Une bande de gonzes.",["personnes","ancien"]],
+["nana","n.f.","Femme, jeune femme.","Une nana sympa.",["personnes"]],
+["type","n.m.","Homme quelconque, individu.","Un type louche rôdait.",["personnes"]],
+["zigoto / zigue","n.m.","Individu, souvent bizarre.","Drôle de zigoto.",["personnes"]],
+["gugusse","n.m.","Individu peu sérieux, guignol.","Qu'est-ce qu'il veut, ce gugusse ?",["personnes"]],
+["pote","n.m.","Ami, copain.","On est potes depuis le collège.",["personnes"]],
+["poto","n.m.","Ami proche (forme affective de « pote »).","Wesh, poto !",["personnes","jeunes"]],
+["frérot","n.m.","Ami proche, terme d'affection.","T'inquiète, frérot.",["personnes","jeunes"]],
+["khey","n.m.","Frère, ami (argot récent).","Ça va, khey ?",["personnes","jeunes"],"De l'arabe maghrébin, « mon frère »."],
+["le sang","n.m.","Ami très proche (« mon sang »).","Lui, c'est mon sang.",["personnes","jeunes"]],
+["ma gueule","loc.","Terme d'affection entre amis.","Ça va, ma gueule ?",["personnes","jeunes"]],
+["caïd","n.m.","Chef de bande, gros dur.","Il joue au caïd devant ses potes.",["personnes"]],
+["gros bonnet","n.m.","Personnage important, puissant.","Un gros bonnet de la finance.",["personnes","expressions"]],
+["lascar","n.m.","Gaillard malin, débrouillard ; voyou.","Ces lascars nous ont bien eus.",["personnes"]],
+["racaille","n.f.","Voyou, délinquant (péjoratif).","Une bande de racailles.",["personnes","insultes"]],
+["zonard","n.m.","Jeune marginal qui traîne sans but.","Des zonards squattaient le hall.",["personnes"]],
+["loulou","n.m.","Voyou (années 1970-80) ; aussi terme affectueux.","Un loulou de banlieue.",["personnes","ancien"]],
+["blouson noir","n.m.","Jeune voyou des années 1950-60.","Les blousons noirs traînaient porte de Clignancourt.",["personnes","ancien"]],
+["apache","n.m.","Voyou parisien de la Belle Époque.","Les apaches de Belleville.",["personnes","ancien"]],
+["titi","n.m.","Gamin de Paris, déluré et gouailleur.","Un vrai titi parisien.",["personnes","ancien"]],
+["bougnat","n.m.","Marchand de charbon et de vin, souvent auvergnat (vieilli).","Le bougnat du coin.",["personnes","ancien"]],
+["bourge","n. et adj.","Bourgeois (péjoratif).","Un quartier de bourges.",["personnes"]],
+["bobo","n.","Bourgeois-bohème : citadin aisé aux goûts alternatifs.","Le quartier s'est rempli de bobos.",["personnes"],"Mot-valise de « bourgeois-bohème »."],
+["beauf","n.m.","Homme aux goûts vulgaires et aux idées étroites.","Il a sorti une blague de beauf.",["personnes","insultes"],"Abrègement de « beau-frère », popularisé par le dessinateur Cabu."],
+["plouc","n.","Paysan, personne rustre (péjoratif).","Quel plouc !",["personnes","insultes"]],
+["péquenaud","n.","Paysan (péjoratif).","Des péquenauds qui débarquent en ville.",["personnes","insultes"]],
+["frimeur","n.","Personne qui cherche à épater.","Un frimeur avec sa grosse montre.",["personnes"]],
+["kéké","n.m.","Frimeur ridicule, crâneur (surtout dans le Sud).","Arrête de faire le kéké.",["personnes"]],
+["mytho","n. et adj.","Menteur, affabulateur.","Le mytho, il dit qu'il connaît Zidane.",["personnes","jeunes"],"Abrègement de « mythomane »."],
+["crevard","n.m.","Personne avare ou qui profite de tout ; affamé.","Le crevard, il a pris les trois derniers croissants.",["personnes","insultes"]],
+["pigeon","n.m.","Personne naïve qu'on dupe facilement.","Il cherche un pigeon pour lui vendre sa caisse.",["personnes"]],
+["cave","n.m.","Naïf, homme étranger au milieu, qu'on peut duper.","Pour le milieu, t'es qu'un cave.",["personnes","ancien"]],
+["boloss / bolosse","n.m.","Personne naïve, ringarde, cible de moqueries.","Quel boloss, il s'est fait avoir.",["personnes","jeunes","insultes"]],
+["poivrot / pochtron","n.m.","Ivrogne.","Les poivrots du comptoir.",["nourriture","personnes"]],
+["glandeur","n.m.","Fainéant, qui ne fait rien.","Un glandeur de première.",["personnes","travail"]],
+
+// Insultes
+["tocard / toquard","n.m.","Personne sans valeur, incapable.","Une équipe de tocards.",["insultes"]],
+["blaireau","n.m.","Individu ridicule, sans finesse.","Le blaireau s'est garé sur trois places.",["insultes"]],
+["bouffon","n.m.","Personne ridicule, qu'on ne prend pas au sérieux.","Arrête de faire le bouffon.",["insultes","jeunes"]],
+["branleur","n.m.","Fainéant, incapable (vulgaire).","Une bande de branleurs.",["insultes"]],
+["gland","n.m.","Imbécile.","Fais pas le gland.",["insultes"]],
+["naze / nase","adj. et n.","Nul, abîmé, épuisé ; personne incapable.","Ce film est naze. Je suis naze ce soir.",["qualificatifs","insultes"]],
+["couillon","n.m.","Imbécile, naïf (surtout dans le Sud).","Quel couillon, celui-là !",["insultes"]],
+["andouille","n.f.","Imbécile (affectueux ou non).","Espèce d'andouille !",["insultes"]],
+["ballot","n.m.","Benêt, maladroit.","T'es ballot d'avoir oublié tes clés.",["insultes"]],
+["nazillon","n.m.","Jeune militant néonazi ou d'extrême droite violente (péjoratif).","Une poignée de nazillons défilait en criant.",["insultes","personnes"]],
+["salopard","n.m.","Individu méprisable.","Le salopard s'est enfui avec la caisse.",["insultes"]],
+["enfoiré","n.m.","Individu méprisable ; parfois affectueux entre amis.","Sacré enfoiré, tu m'as manqué !",["insultes"]],
+["fumier","n.m.","Individu ignoble.","Quel fumier, il a balancé tout le monde.",["insultes"]],
+["ordure","n.f.","Personne abjecte.","C'est une ordure finie.",["insultes"]],
+["peau de vache","n.f.","Personne dure, méchante.","Le chef est une vraie peau de vache.",["insultes","expressions"]],
+["tête de nœud","n.f.","Imbécile (vulgaire).","Écoute, tête de nœud.",["insultes"]],
+["morveux","n.","Enfant, ou jeune prétentieux.","Un petit morveux m'a fait la leçon.",["famille","insultes"]],
+
+// Famille
+["daron / daronne","n.","Père / mère ; les darons : les parents.","Je rentre, mes darons m'attendent.",["famille"]],
+["reum","n.f.","Mère.","Ma reum m'a appelé.",["famille","verlan"],"Verlan de « mère »."],
+["vieux / vieille","n.","Père / mère ; les vieux : les parents.","Mes vieux partent en vacances.",["famille"]],
+["frangin / frangine","n.","Frère / sœur.","Mon frangin bosse à Lyon.",["famille"]],
+["mioche","n.","Enfant.","Elle a trois mioches.",["famille"]],
+["môme","n.","Enfant.","Quand j'étais môme…",["famille"]],
+["gosse","n.","Enfant.","Les gosses jouent dans la cour.",["famille"],"Attention : au Québec, le mot désigne les testicules."],
+["marmot","n.m.","Petit enfant.","Une ribambelle de marmots.",["famille"]],
+["lardon","n.m.","Enfant.","Elle garde les lardons ce week-end.",["famille"]],
+["belle-doche","n.f.","Belle-mère (péjoratif).","Déjeuner chez la belle-doche dimanche.",["famille"]],
+["smala","n.f.","Famille nombreuse, tribu.","Il est venu avec toute la smala.",["famille"],"De l'arabe, désignant le campement d'un chef et de sa suite."],
+
+// Corps
+["tronche","n.f.","Tête, visage.","T'as vu sa tronche ?",["corps"]],
+["gueule","n.f.","Bouche, visage (parfois vulgaire).","Il a une belle gueule.",["corps"]],
+["caboche / ciboulot / citron","n.","Tête, esprit.","Ça lui est passé par le ciboulot.",["corps"]],
+["pif / tarin","n.m.","Nez.","Un gros pif rouge.",["corps"]],
+["esgourdes","n.f.pl.","Oreilles.","Ouvre bien tes esgourdes.",["corps","ancien"]],
+["mirettes","n.f.pl.","Yeux.","Il en a pris plein les mirettes.",["corps"]],
+["quenottes / ratiches","n.f.pl.","Dents (quenottes : dents d'enfant).","Brosse-toi les quenottes.",["corps"]],
+["tifs","n.m.pl.","Cheveux.","Je vais me faire couper les tifs.",["corps"]],
+["guiboles / gambettes","n.f.pl.","Jambes.","J'ai plus de guiboles après la rando.",["corps"]],
+["panard / arpion","n.m.","Pied.","Il a des panards énormes.",["corps"]],
+["paluche / pogne","n.f.","Main.","Serre-moi la paluche.",["corps"]],
+["bide / bidon","n.m.","Ventre.","Il a pris du bide.",["corps"]],
+["popotin / derche","n.m.","Fesses, derrière.","Bouge ton popotin.",["corps"]],
+["palpitant","n.m.","Cœur.","Le palpitant a lâché.",["corps"]],
+["carcasse","n.f.","Le corps.","Ma vieille carcasse.",["corps"]],
+
+// Nourriture & boisson
+["bouffe","n.f.","Nourriture, repas.","La bouffe était bonne.",["nourriture"]],
+["bouffer","v.","Manger.","On va bouffer où ?",["nourriture","actions"]],
+["grailler","v.","Manger ; la graille : la nourriture.","C'est l'heure de grailler.",["nourriture","actions"]],
+["avoir la dalle","loc.","Avoir faim.","J'ai la dalle, on mange ?",["nourriture","expressions"]],
+["casse-dalle / casse-croûte","n.m.","Sandwich, repas sur le pouce.","Un petit casse-dalle à midi.",["nourriture"]],
+["casser la croûte","loc.","Manger.","On casse la croûte à midi.",["nourriture","expressions"]],
+["s'empiffrer","v.","Manger avec excès.","Il s'est empiffré de gâteaux.",["nourriture"]],
+["frometon","n.m.","Fromage.","Un bout de frometon.",["nourriture"]],
+["calendos","n.m.","Camembert.","Un calendos bien coulant.",["nourriture"]],
+["barbaque / bidoche","n.f.","Viande (souvent de mauvaise qualité).","De la barbaque trop cuite.",["nourriture"]],
+["rata","n.m.","Ragoût, mauvaise cuisine (argot militaire).","Le rata de la cantine.",["nourriture","ancien"]],
+["pinard","n.m.","Vin ordinaire.","Une bouteille de pinard.",["nourriture"]],
+["picrate / vinasse","n.","Mauvais vin.","Ce picrate râpe la gorge.",["nourriture"]],
+["binouze / mousse","n.f.","Bière.","On se prend une binouze ?",["nourriture"]],
+["kawa / jus","n.m.","Café.","Un petit kawa ?",["nourriture"]],
+["flotte","n.f.","Eau ; pluie.","Il tombe de la flotte.",["nourriture"]],
+["picoler / tiser","v.","Boire de l'alcool.","Ils ont tisé toute la nuit.",["nourriture","actions"]],
+["bourré / pété / torché","adj.","Ivre.","Il était complètement bourré.",["nourriture","qualificatifs"]],
+["beurré","adj.","Ivre.","Beurré comme un petit Lu.",["nourriture","qualificatifs"]],
+["cuite","n.f.","Ivresse (prendre une cuite).","Il a pris une sacrée cuite.",["nourriture"]],
+["avoir un coup dans le nez","loc.","Être un peu ivre.","Il avait un petit coup dans le nez.",["expressions","nourriture"]],
+["apéro","n.m.","Apéritif.","On fait un apéro ce soir ?",["nourriture"]],
+
+// Objets & vêtements
+["clope","n.f.","Cigarette.","T'as pas une clope ?",["objets"]],
+["tige","n.f.","Cigarette.","Je descends m'en griller une tige.",["objets"]],
+["fringues / sapes","n.f.pl.","Vêtements.","Il a des fringues de marque.",["objets"]],
+["se saper","v.","S'habiller.","Bien sapé pour le mariage.",["objets","actions"]],
+["futal / froc / falzar","n.m.","Pantalon.","Il a déchiré son froc.",["objets"]],
+["calbute / calbar","n.m.","Caleçon.","Il traîne en calbute.",["objets"]],
+["grolles / pompes / godasses","n.f.pl.","Chaussures.","Enlève tes godasses.",["objets"]],
+["galurin / bitos","n.m.","Chapeau.","Un vieux galurin.",["objets","ancien"]],
+["bagnole / caisse / tire","n.f.","Voiture.","Il a une belle caisse.",["objets"]],
+["bécane","n.f.","Moto, vélo ; machine en général (ordinateur…).","Ma bécane rame.",["objets"]],
+["biclou","n.m.","Vélo.","Je viens en biclou.",["objets"]],
+["téloche","n.f.","Télévision.","Il passe sa vie devant la téloche.",["objets"]],
+["bigophone","n.m.","Téléphone.","Passe-moi un coup de bigophone.",["objets"]],
+["surin / eustache","n.m.","Couteau.","Il avait un surin dans la poche.",["objets","ancien"]],
+["machin / truc / bidule","n.m.","Objet dont on ignore ou oublie le nom.","Passe-moi le bidule, là.",["objets"]],
+["came","n.f.","Marchandise ; drogue.","C'est de la bonne came.",["objets"]],
+["bricole","n.f.","Petite chose ; ennui (« il va t'arriver des bricoles »).","Il va t'arriver des bricoles.",["objets","expressions"]],
+
+// Logement & lieux
+["piaule / turne","n.f.","Chambre, logement.","Ma piaule fait 12 m².",["logement"]],
+["crécher","v.","Habiter, loger ; la crèche : le domicile.","Tu crèches où en ce moment ?",["logement"]],
+["baraque","n.f.","Maison.","Une grande baraque à la campagne.",["logement"]],
+["gourbi","n.m.","Logement sale ou misérable.","Un vrai gourbi, son appart.",["logement"]],
+["pieu / plumard / pageot","n.m.","Lit.","Au pieu, il est tard !",["logement"]],
+["se pieuter","v.","Se coucher.","Je me pieute, je suis claqué.",["logement","actions"]],
+["roupiller / pioncer","v.","Dormir.","Il roupille encore à midi.",["actions"]],
+["chiottes","n.f.pl.","Toilettes (vulgaire).","Les chiottes sont au fond.",["logement"]],
+["lourde","n.f.","Porte.","Ferme la lourde.",["logement","ancien"]],
+["tieks / tiekson","n.m.","Quartier.","On se retrouve au tieks.",["logement","verlan","jeunes"],"Verlan de « quartier »."],
+["zonmai","n.f.","Maison.","On rentre à la zonmai.",["logement","verlan"],"Verlan de « maison »."],
+["tromé","n.m.","Métro.","On prend le tromé.",["verlan"],"Verlan de « métro »."],
+["bled","n.m.","Village perdu ; pays d'origine.","Un bled paumé.",["logement"],"De l'arabe bilad, « pays »."],
+["patelin","n.m.","Village.","Le patelin où j'ai grandi.",["logement"]],
+
+// Travail
+["boulot","n.m.","Travail, emploi.","J'ai trouvé un nouveau boulot.",["travail"]],
+["taf","n.m.","Travail.","Je sors du taf à 18 h.",["travail"]],
+["turbin","n.m.","Travail (vieilli).","Retour au turbin lundi.",["travail","ancien"]],
+["bosser","v.","Travailler.","Il bosse dur.",["travail","actions"]],
+["trimer / turbiner","v.","Travailler dur.","On trime pour pas grand-chose.",["travail"]],
+["glander / glandouiller","v.","Ne rien faire, perdre son temps.","J'ai glandé tout le week-end.",["travail","actions"]],
+["avoir un poil dans la main","loc.","Être paresseux.","Lui, il a un poil dans la main.",["travail","expressions"]],
+["se faire lourder","loc.","Être licencié, renvoyé.","Il s'est fait lourder hier.",["travail"]],
+["chômdu","n.m.","Chômage.","Il est au chômdu depuis six mois.",["travail"]],
+["boîte","n.f.","Entreprise ; aussi discothèque.","Je bosse dans une petite boîte.",["travail"]],
+["singe","n.m.","Patron (argot ouvrier ancien).","Le singe nous a à l'œil.",["travail","ancien"]],
+["planque","n.f.","Cachette ; emploi tranquille et peu fatigant.","Il s'est trouvé une bonne planque.",["travail"]],
+["avoir la flemme","loc.","Ne pas avoir envie de faire un effort.","J'ai la flemme de sortir.",["travail","sentiments"]],
+
+// Sentiments
+["avoir le seum","loc.","Être dégoûté, frustré, en colère.","J'ai le seum, on a perdu.",["sentiments","jeunes"],"De l'arabe maghrébin, « venin »."],
+["avoir les boules","loc.","Être énervé ou angoissé.","J'avais les boules avant l'exam.",["sentiments","expressions"]],
+["avoir les chocottes / les jetons","loc.","Avoir peur.","J'avais les chocottes dans le noir.",["sentiments","expressions"]],
+["flipper","v.","Avoir peur, angoisser.","Je flippe pour demain.",["sentiments","actions"]],
+["avoir la pêche / la patate","loc.","Être en forme.","J'ai la pêche ce matin !",["sentiments","expressions"]],
+["avoir le cafard","loc.","Être déprimé.","Le dimanche soir, j'ai le cafard.",["sentiments","expressions"]],
+["kiffer","v.","Aimer, apprécier.","Je kiffe ce son.",["sentiments","jeunes"],"De l'arabe kif, « plaisir »."],
+["vénère","adj.","Énervé.","Il est vénère contre toi.",["sentiments","verlan"],"Verlan de « énervé »."],
+["en avoir ras le bol","loc.","En avoir assez.","J'en ai ras le bol de ce boulot.",["sentiments","expressions"]],
+["deg","adj.","Dégoûté, déçu.","Trop deg, le concert est annulé.",["sentiments","jeunes"],"Abrègement de « dégoûté »."],
+["être en PLS","loc.","Être au plus mal, abattu.","Après le partiel, j'étais en PLS.",["sentiments","jeunes"],"PLS : position latérale de sécurité."],
+["chialer","v.","Pleurer.","Il a chialé comme un gosse.",["sentiments","actions"]],
+["se fendre la poire","loc.","Rire beaucoup.","On s'est bien fendu la poire.",["sentiments","expressions"]],
+["se marrer","v.","Rire, s'amuser.","On s'est bien marrés.",["sentiments"]],
+["crush","n.m.","Béguin, coup de cœur amoureux.","J'ai un crush sur elle.",["sentiments","jeunes"],"De l'anglais."],
+["se prendre un râteau","loc.","Essuyer un refus amoureux.","Il s'est pris un râteau monumental.",["sentiments","expressions"]],
+["pécho","v.","Séduire ; attraper.","Il a pécho à la soirée.",["sentiments","verlan","jeunes"],"Verlan de « choper »."],
+["faire la gueule","loc.","Bouder.","Pourquoi tu fais la gueule ?",["sentiments","expressions"]],
+["péter un câble / les plombs","loc.","Perdre son sang-froid.","Il a pété un câble en réunion.",["sentiments","expressions"]],
+["se faire du mouron","loc.","S'inquiéter.","Te fais pas de mouron pour moi.",["sentiments","expressions"]],
+["bader","v.","Déprimer, s'inquiéter, mal vivre une situation.","Je bade un peu, là.",["sentiments","jeunes"]],
+["avoir le démon","loc.","Être très énervé, rageur.","J'ai le démon depuis ce matin.",["sentiments","jeunes"]],
+
+// Actions
+["piger / capter","v.","Comprendre.","T'as capté ?",["actions"]],
+["se barrer / se casser / se tirer","v.","Partir.","Allez, on se casse.",["actions"]],
+["se tailler","v.","Partir, s'enfuir.","Taille-toi !",["actions"]],
+["mettre les voiles","loc.","S'en aller.","Il a mis les voiles sans prévenir.",["actions","expressions"]],
+["se faire la malle","loc.","S'enfuir.","Le prisonnier s'est fait la malle.",["actions","expressions"]],
+["mater / zieuter","v.","Regarder.","Mate un peu ça !",["actions"]],
+["téma","v.","Regarde ! (à l'impératif).","Téma la taille du truc !",["actions","verlan","jeunes"],"Verlan de « mate »."],
+["piquer / faucher","v.","Voler.","On m'a piqué mon vélo.",["actions"]],
+["chouraver","v.","Voler.","Il a chouravé des bonbons.",["actions"],"Du romani."],
+["carotter / entuber","v.","Escroquer, duper.","Il s'est fait carotter de 200 balles.",["actions"]],
+["baratiner","v.","Raconter des histoires pour convaincre ou séduire.","Il l'a baratinée toute la soirée.",["actions"]],
+["tchatcher / jacter","v.","Parler, bavarder.","Ils ont tchatché pendant des heures.",["actions"]],
+["tailler une bavette","loc.","Bavarder.","On a taillé une bavette avec la voisine.",["actions","expressions"]],
+["gueuler","v.","Crier ; protester.","Arrête de gueuler !",["actions"]],
+["râler","v.","Protester, se plaindre.","Les Français adorent râler.",["actions"]],
+["se gourer / se planter","v.","Se tromper ; échouer.","Je me suis gouré de bus.",["actions"]],
+["galérer","v.","Avoir des difficultés.","J'ai galéré pour trouver un appart.",["actions","jeunes"]],
+["bouquiner","v.","Lire.","Il bouquine au lit.",["actions"]],
+["se pointer / rappliquer","v.","Arriver, venir.","Il s'est pointé à minuit.",["actions"]],
+["se magner / se grouiller","v.","Se dépêcher.","Magne-toi, on va rater le train !",["actions"]],
+["cramer","v.","Brûler ; démasquer (se faire cramer).","Il s'est fait cramer en train de tricher.",["actions","jeunes"]],
+["griller","v.","Démasquer ; brûler (un feu rouge) ; fumer (une cigarette).","T'es grillé !",["actions"]],
+["chiller","v.","Se détendre, ne rien faire.","On chille chez moi ce soir.",["actions","jeunes"],"De l'anglais to chill."],
+["tèj","v.","Jeter ; rejeter quelqu'un, rompre.","Elle l'a tèj.",["actions","verlan","jeunes"],"Verlan de « jeter »."],
+["filer","v.","Donner ; partir vite.","File-moi ton numéro.",["actions"]],
+["refiler","v.","Donner, transmettre (souvent pour s'en débarrasser).","Il m'a refilé son rhume.",["actions"]],
+["casser les pieds","loc.","Ennuyer, importuner.","Tu me casses les pieds.",["expressions"]],
+["poser un lapin","loc.","Ne pas venir à un rendez-vous.","Elle m'a posé un lapin.",["expressions"]],
+["se faire avoir","loc.","Être dupé.","Je me suis fait avoir comme un bleu.",["actions"]],
+
+// Qualificatifs
+["chelou","adj.","Louche, bizarre.","Il est chelou, ce type.",["qualificatifs","verlan"],"Verlan de « louche »."],
+["zarbi","adj.","Bizarre.","Une ambiance zarbi.",["qualificatifs","verlan"],"Verlan de « bizarre »."],
+["ouf","adj. et n.","Fou ; incroyable.","C'est ouf !",["qualificatifs","verlan"],"Verlan de « fou »."],
+["chanmé","adj.","Génial, excellent.","La soirée était chanmé.",["qualificatifs","verlan"],"Verlan de « méchant »."],
+["cheum","adj.","Moche.","Il est cheum, ton pull.",["qualificatifs","verlan"],"Verlan de « moche »."],
+["guedin","adj.","Fou ; extraordinaire.","Ce match était guedin.",["qualificatifs","verlan","jeunes"],"Verlan de « dingue »."],
+["auch","adj.","Chaud : difficile, risqué ; motivé.","Ça va être auch.",["qualificatifs","verlan","jeunes"],"Verlan de « chaud »."],
+["relou","adj.","Lourd, pénible, agaçant.","Il est trop relou avec ses questions.",["qualificatifs","verlan"],"Verlan de « lourd »."],
+["céfran","adj. et n.","Français.","Un plat bien céfran.",["verlan"],"Verlan de « français »."],
+["dingue / dingo","adj.","Fou ; extraordinaire.","Un truc de dingue.",["qualificatifs"]],
+["timbré / fêlé / maboul / zinzin","adj.","Fou.","Il est complètement timbré.",["qualificatifs"]],
+["louf / loufoque","adj.","Fou, extravagant.","Une idée loufoque.",["qualificatifs"],"Formé en largonji sur « fou »."],
+["crevé / claqué / lessivé / vanné","adj.","Épuisé.","Je suis lessivé après cette journée.",["qualificatifs"]],
+["crade / cradingue / dégueu","adj.","Sale, dégoûtant.","La cuisine est crade.",["qualificatifs"]],
+["chiant / barbant / rasoir","adj.","Ennuyeux.","Un film rasoir.",["qualificatifs"]],
+["nickel / impec","adj.","Parfait, très propre.","C'est nickel, merci !",["qualificatifs"]],
+["bath","adj.","Beau, agréable (vieilli).","C'était bath, cette virée.",["qualificatifs","ancien"]],
+["chouette","adj.","Agréable, sympathique.","Une chouette soirée.",["qualificatifs"]],
+["stylé","adj.","Qui a du style, réussi.","Trop stylé, tes baskets.",["qualificatifs","jeunes"]],
+["canon","adj. et n.m.","Très beau, très belle.","Elle est canon.",["qualificatifs"]],
+["tarte / tartignole","adj.","Laid ; ridicule.","Il est tarte, ce chapeau.",["qualificatifs"]],
+["ringard","adj. et n.","Démodé, dépassé.","Une déco ringarde.",["qualificatifs"]],
+["gênant","adj.","Embarrassant, ridicule.","Trop gênant, son discours.",["qualificatifs","jeunes"]],
+["paumé","adj.","Perdu, désorienté ; isolé.","Un village paumé.",["qualificatifs"]],
+["mortel","adj.","Génial ; ou très ennuyeux selon le contexte.","Le concert était mortel !",["qualificatifs"]],
+["vachement","adv.","Très, beaucoup.","C'est vachement bien.",["qualificatifs"]],
+["grave","adv.","Très, tout à fait.","Je suis grave d'accord.",["qualificatifs","jeunes"]],
+["trop","adv.","Très (sans idée d'excès).","C'est trop bien !",["qualificatifs","jeunes"]],
+["dead","adj.","Mort de rire ; épuisé.","Je suis dead, cette vidéo !",["qualificatifs","jeunes"],"De l'anglais."],
+
+// Expressions
+["que dalle","loc.","Rien du tout.","J'ai compris que dalle.",["expressions"]],
+["peau de balle / nib","loc.","Rien du tout.","Peau de balle, t'auras rien.",["expressions","ancien"]],
+["c'est la hess","loc.","C'est la misère, la galère (surtout financière).","Fin du mois, c'est la hess.",["expressions","jeunes","argent"],"De l'arabe maghrébin."],
+["c'est mort","loc.","C'est fichu, impossible.","Pour ce soir, c'est mort.",["expressions","jeunes"]],
+["ça craint","loc.","C'est mauvais, inquiétant ou ridicule.","Ça craint, ce quartier.",["expressions"]],
+["ça passe crème","loc.","Ça passe facilement, sans problème.","Avec le prof, ça passe crème.",["expressions","jeunes"]],
+["en loucedé","loc.","Discrètement, en cachette.","Il est sorti en loucedé.",["expressions"],"Largonji de « en douce »."],
+["fissa","adv.","Très vite.","Ramène-toi fissa !",["expressions"],"De l'arabe, « vite »."],
+["dare-dare / illico","adv.","Immédiatement, en toute hâte.","Il est arrivé dare-dare.",["expressions"]],
+["laisse béton","loc.","Laisse tomber.","Laisse béton, c'est pas grave.",["expressions","verlan"],"Verlan de « tomber », popularisé par la chanson de Renaud (1977)."],
+["tomber dans les pommes","loc.","S'évanouir.","Elle est tombée dans les pommes.",["expressions"]],
+["être à l'ouest","loc.","Être distrait, déboussolé.","Ce matin, je suis complètement à l'ouest.",["expressions"]],
+["coûter un bras","loc.","Coûter très cher.","Ce canapé m'a coûté un bras.",["expressions","argent"]],
+["se mettre sur son trente-et-un","loc.","S'habiller élégamment.","Il s'est mis sur son trente-et-un.",["expressions"]],
+["c'est pas tes oignons","loc.","Ce n'est pas ton affaire.","Occupe-toi de tes oignons.",["expressions"]],
+["ça me fait une belle jambe","loc.","Ça ne m'avance à rien.","Ça me fait une belle jambe, tes excuses.",["expressions"]],
+["s'en battre l'œil","loc.","S'en moquer complètement.","Je m'en bats l'œil.",["expressions"]],
+["osef","loc.","On s'en fout.","Son avis ? Osef.",["expressions","jeunes"],"Sigle oral de « on s'en fout »."],
+["prendre la tangente","loc.","S'esquiver.","Il a pris la tangente avant la fin.",["expressions"]],
+["avoir la tête dans le pâté","loc.","Être mal réveillé, groggy.","Ce matin, j'ai la tête dans le pâté.",["expressions"]],
+["sucrer les fraises","loc.","Trembler avec l'âge ; être gâteux.","Le vieux commence à sucrer les fraises.",["expressions"]],
+["être dans la panade / la mouise","loc.","Être dans la misère, en difficulté.","Depuis qu'il a perdu son boulot, il est dans la panade.",["expressions"]],
+["à la mords-moi-le-nœud","loc.","Mal fait, de mauvaise qualité (vulgaire).","Un travail à la mords-moi-le-nœud.",["expressions"]],
+["avoir la gnaque","loc.","Avoir de la détermination, de la combativité.","Elle a la gnaque, cette joueuse.",["expressions"]],
+["être au taquet","loc.","Être à fond, très motivé.","Toute l'équipe est au taquet.",["expressions"]],
+["c'est du pipeau / du flan","loc.","C'est faux, du bluff.","Ses promesses, c'est du pipeau.",["expressions"]],
+
+// Argot des jeunes
+["wesh","interj.","Salut ; marque d'interpellation ou d'étonnement.","Wesh, bien ou quoi ?",["jeunes"],"De l'arabe algérien, « quoi »."],
+["wallah","interj.","Je te jure.","Wallah, c'est vrai !",["jeunes"],"De l'arabe, « par Dieu »."],
+["sah","interj.","Sérieux, vraiment.","Sah, t'es sûr ?",["jeunes"]],
+["miskine","interj. et adj.","Le pauvre ! ; pitoyable.","Miskine, il s'est fait recaler.",["jeunes"],"De l'arabe, « pauvre »."],
+["askip","adv.","À ce qu'il paraît.","Askip, il déménage.",["jeunes","acronymes"],"Contraction de « à ce qu'il paraît »."],
+["crari","loc.","On dirait ; soi-disant.","Crari il connaît tout le monde.",["jeunes"]],
+["en mode","loc.","À la manière de, comme.","Il est arrivé en mode star.",["jeunes"]],
+["tkt","loc.","T'inquiète.","Tkt, je gère.",["jeunes","acronymes"],"Abréviation SMS."],
+["mdr / ptdr","loc.","« Mort de rire » / « pété de rire ».","Ptdr, la vidéo !",["jeunes","acronymes"],"Abréviations SMS."],
+["BG","n.m.","Beau gosse.","Il se prend pour un BG.",["jeunes","acronymes"]],
+["flexer","v.","Frimer, étaler sa richesse ; le flex : la frime.","Il flexe avec sa montre.",["jeunes"],"De l'anglais to flex."],
+["ghoster","v.","Couper brutalement toute communication avec quelqu'un.","Elle m'a ghosté après deux rendez-vous.",["jeunes"],"De l'anglais ghost, « fantôme »."],
+["tu connais","loc.","« Tu vois ce que je veux dire » (approbation complice).","Le vendredi soir, tu connais.",["jeunes"]],
+["c'est carré","loc.","C'est bien organisé, réglé.","Pour la soirée, c'est carré.",["jeunes"]],
+["teuf","n.f.","Fête.","Grosse teuf samedi !",["jeunes","verlan"],"Verlan de « fête »."],
+
+// Animaux
+["clébard / clebs / cabot","n.m.","Chien.","Son clébard aboie toute la nuit.",["animaux"]],
+["greffier","n.m.","Chat.","Le greffier dort sur le radiateur.",["animaux","ancien"]],
+["piaf","n.m.","Moineau, petit oiseau.","Les piafs du square.",["animaux"]],
+["bestiole","n.f.","Petite bête, insecte.","Une bestiole m'a piqué.",["animaux"]],
+["gail","n.m.","Cheval.","Parier sur les gails.",["animaux","ancien"]],
+
+// L'argot sur l'argot
+["verlan","n.m.","Argot qui inverse les syllabes des mots.","« Meuf » et « keum » viennent du verlan.",["verlan"],"Verlan de « l'envers »."],
+["largonji","n.m.","Argot qui remplace la première consonne par « l », la rejette à la fin et ajoute un suffixe.","« En loucedé » est du largonji.",["ancien"],"Largonji de « jargon »."],
+["louchébem","n.m.","Argot des bouchers parisiens, variante du largonji.","Les bouchers de la Villette parlaient louchébem.",["ancien"],"Largonji de « boucher »."],
+["gouaille","n.f.","Verve moqueuse et populaire.","Arletty et sa gouaille légendaire.",["ancien"]],
+];
+
+const THEMES = {
+  argent:"Argent", police:"Police & justice", personnes:"Personnes", famille:"Famille", corps:"Corps",
+  nourriture:"Bouffe & picole", objets:"Objets & fringues", logement:"Logement & lieux", travail:"Boulot",
+  sentiments:"Sentiments", actions:"Verbes d'action", qualificatifs:"Qualificatifs", insultes:"Insultes",
+  expressions:"Expressions", verlan:"Verlan", jeunes:"Argot des jeunes", ancien:"Argot ancien",
+  animaux:"Animaux", acronymes:"Sigles & acronymes"
+};
+
+/* ---------- LOGIQUE ---------- */
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/œ/g,"oe");
+const slug = s => norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const E = D.map(([m,g,d,e,t,o,opt])=>{
+  const key = norm(m).replace(/[^a-z0-9 ]/g,"");
+  return {m,g,d,e,t,o,opt:opt||{},id:slug(m),key,letter:key[0].toUpperCase(),hay:norm([m,d,e,o||""].join(" "))};
+}).sort((a,b)=>a.key.localeCompare(b.key,"fr"));
+
+const state = {q:"",letter:null,theme:null};
+const $ = id => document.getElementById(id);
+
+function hl(text,q){
+  const safe = esc(text);
+  if(!q) return safe;
+  // surligne en ignorant les accents
+  const n = norm(text); const out=[]; let i=0, idx;
+  while((idx=n.indexOf(q,i))!==-1){ out.push(esc(text.slice(i,idx)),"<mark>",esc(text.slice(idx,idx+q.length)),"</mark>"); i=idx+q.length; }
+  out.push(esc(text.slice(i))); return out.join("");
+}
+
+function entryHTML(x,q){
+  return `<article class="entry" id="${x.id}">
+    <a class="hw" href="#${x.id}" data-copy="${x.id}">${hl(x.m,q)}</a><span class="gram">${esc(x.g)}</span>${x.opt.nouveau?'<span class="badge">Nouveau</span>':''}
+    <p class="d">${hl(x.d,q)}</p>
+    ${x.e?`<p class="ex">${hl(x.e,q)}</p>`:""}
+    ${x.o?`<p class="or"><b>Origine :</b> ${esc(x.o)}</p>`:""}
+    <div class="tags">${x.t.map(t=>`<button class="tag" data-theme="${t}">${THEMES[t]||t}</button>`).join("")}</div>
+  </article>`;
+}
+
+function filtered(){
+  const q = norm(state.q.trim());
+  return E.filter(x=>(!state.letter||x.letter===state.letter)&&(!state.theme||x.t.includes(state.theme))&&(!q||x.hay.includes(q)));
+}
+
+function render(){
+  const q = norm(state.q.trim());
+  const list = filtered();
+  let html="", cur="";
+  for(const x of list){
+    if(x.letter!==cur){ cur=x.letter; html+=`<h2 class="letter">${cur}</h2>`; }
+    html+=entryHTML(x,q);
+  }
+  $("list").innerHTML = html || `<p class="empty" style="column-span:all">Que dalle ! Aucun mot ne correspond.</p>`;
+  const filt = state.q||state.letter||state.theme;
+  $("count").textContent = filt ? `${list.length} résultat${list.length>1?"s":""} sur ${E.length} entrées` : `${E.length} entrées`;
+  $("reset").style.display = filt ? "" : "none";
+  $("featured").style.display = filt ? "none" : "";
+  document.querySelectorAll("#alpha button").forEach(b=>b.classList.toggle("on",b.dataset.l===state.letter));
+  document.querySelectorAll("#chips .chip").forEach(b=>b.classList.toggle("on",(b.dataset.t||null)===state.theme));
+}
+
+function buildNav(){
+  const letters = new Set(E.map(x=>x.letter));
+  $("alpha").innerHTML = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(l=>`<button data-l="${l}" ${letters.has(l)?"":"disabled"}>${l}</button>`).join("");
+  const counts = {}; E.forEach(x=>x.t.forEach(t=>counts[t]=(counts[t]||0)+1));
+  $("chips").innerHTML = `<button class="chip on" data-t="">Tout<small>${E.length}</small></button>` +
+    Object.keys(THEMES).filter(t=>counts[t]).map(t=>`<button class="chip" data-t="${t}">${THEMES[t]}<small>${counts[t]}</small></button>`).join("");
+}
+
+function buildFeatured(){
+  const pool = E.filter(x=>!x.opt.nouveau);
+  const d = new Date(); const seed = d.getFullYear()*1000 + Math.floor((d - new Date(d.getFullYear(),0,0))/864e5);
+  const jour = pool[seed % pool.length];
+  $("featured").innerHTML =
+    `<div class="card"><div class="label">Le mot du jour</div>${entryHTML(jour,"")}</div>`;
+}
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1800); }
+
+function goTo(id){
+  state.q=""; state.letter=null; state.theme=null; $("q").value=""; render();
+  requestAnimationFrame(()=>{ const el=document.getElementById(id); if(el){ location.hash=id; el.scrollIntoView({block:"center"}); } });
+}
+
+// Événements
+$("q").addEventListener("input",e=>{ state.q=e.target.value; state.letter=null; render(); });
+$("alpha").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b||b.disabled) return; state.letter = state.letter===b.dataset.l?null:b.dataset.l; render(); window.scrollTo({top:$("list").offsetTop-200,behavior:"smooth"}); });
+$("chips").addEventListener("click",e=>{ const b=e.target.closest(".chip"); if(!b) return; state.theme=b.dataset.t||null; render(); });
+document.addEventListener("click",e=>{
+  const tag=e.target.closest(".tag");
+  if(tag){ state.theme=tag.dataset.theme; state.letter=null; state.q=""; $("q").value=""; render(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+  const hw=e.target.closest("[data-copy]");
+  if(hw){ e.preventDefault(); const url=location.href.split("#")[0]+"#"+hw.dataset.copy;
+    try{ navigator.clipboard.writeText(url).then(()=>toast("Lien copié !"),()=>{}); }catch(_){}
+    goTo(hw.dataset.copy); }
+});
+$("reset").addEventListener("click",e=>{ e.preventDefault(); state.q="";state.letter=null;state.theme=null;$("q").value=""; render(); });
+$("randBtn").addEventListener("click",()=>{ const x=E[Math.floor(Math.random()*E.length)]; goTo(x.id); });
+document.addEventListener("keydown",e=>{ if(e.key==="/"&&document.activeElement!==$("q")){ e.preventDefault(); $("q").focus(); } });
+
+// Thème clair / sombre
+(function(){
+  const root=document.documentElement; let saved=null;
+  try{ saved=localStorage.getItem("bebert-theme"); }catch(_){}
+  if(saved) root.dataset.theme=saved;
+  $("themeBtn").addEventListener("click",()=>{
+    const dark = root.dataset.theme ? root.dataset.theme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark?"light":"dark";
+    try{ localStorage.setItem("bebert-theme",root.dataset.theme); }catch(_){}
+  });
+})();
+
+buildNav(); buildFeatured(); render();
+if(location.hash){ const el=document.getElementById(location.hash.slice(1)); if(el) setTimeout(()=>el.scrollIntoView({block:"center"}),50); }
+</script>
+</body>
+</html>
