@@ -39,7 +39,7 @@ header.hero{padding:48px 0 24px;text-align:center;border-bottom:3px double var(-
 
 .toolbar{position:sticky;top:0;z-index:10;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
 .searchrow{display:flex;gap:8px}
-.search{flex:1;display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 14px;box-shadow:var(--shadow)}
+.search{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 14px;box-shadow:var(--shadow)}
 .search input{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:1.05rem;padding:12px 0;outline:none;min-width:0}
 .btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:12px;padding:0 14px;font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -82,13 +82,14 @@ mark{background:var(--accent-soft);color:inherit;border-radius:3px;padding:0 1px
 .empty{text-align:center;padding:48px 0;color:var(--muted);font-family:"Playfair Display",serif;font-style:italic;font-size:1.1rem}
 
 footer{margin-top:48px;padding:28px 0 40px;border-top:3px double var(--line);color:var(--muted);font-size:.88rem;text-align:center}
-footer .legend{max-width:620px;margin:0 auto 14px;text-align:left}
+footer .legend{max-width:620px;margin:0 auto 14px;display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;row-gap:4px}
 footer .legend dt{font-weight:600;color:var(--ink);display:inline}
 footer .legend dd{display:inline;margin:0 12px 0 4px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:.9rem;transition:transform .25s;z-index:20}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .theme-toggle{position:absolute;top:14px;right:16px}
 .top{position:relative}
+@media (max-width:520px){header.hero{padding-top:64px}.randlbl{display:none}.search input{font-size:1rem}}
 </style>
 </head>
 <body>
@@ -107,9 +108,9 @@ footer .legend dd{display:inline;margin:0 12px 0 4px}
     <div class="searchrow">
       <label class="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Chercher un mot, une définition…" autocomplete="off" aria-label="Rechercher">
+        <input id="q" type="search" placeholder="Chercher un mot…" autocomplete="off" aria-label="Rechercher">
       </label>
-      <button class="btn" id="randBtn" title="Un mot au hasard">🎲 Au hasard</button>
+      <button class="btn" id="randBtn" title="Un mot au hasard" aria-label="Un mot au hasard">🎲<span class="randlbl"> Au hasard</span></button>
     </div>
     <div class="alpha" id="alpha"></div>
     <div class="chips" id="chips"></div>
@@ -137,7 +138,7 @@ footer .legend dd{display:inline;margin:0 12px 0 4px}
 const D = [
 // Ajout récent
 ["F.D.O","acron.","« Fieffé dingue ordurier » : injure familière manifestant son indignation, notamment contre les nazillons traîtres à la Patrie. Acronyme utilisé en ligne, dans toute la France depuis 2016.","Ce F.D.O a encore tagué la mairie !",["insultes","acronymes"],"Sigle de « fieffé dingue ordurier »."],
-["F.D.P","acron.","« Fils de pute » : injure très grossière, très répandue en ligne (messages, commentaires, jeux vidéo).","Il m'a traité de FDP dans le chat du jeu.",["insultes","acronymes","jeunes"],"Sigle de « fils de pute »."],
+["F.D.P","acron.","« Fils de pute » : injure très grossière, très répandue en ligne (messages, commentaires, jeux vidéo).","Kukrapok est un grand fils de pute de nazi sans aucune espèce de race. NTM, Kukrapok !",["insultes","acronymes","jeunes"],"Sigle de « fils de pute »."],
 ["Bébert","n.m.","Diminutif populaire d'Albert ou de Robert ; par extension, le Français moyen, gouailleur et sans chichis.","Bébert, au comptoir, refaisait le monde.",["personnes"]],
 
 // Argent
