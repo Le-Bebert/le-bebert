@@ -71,7 +71,7 @@ header.hero{padding:48px 0 24px;text-align:center;border-bottom:3px double var(-
 .gram{font-family:"Playfair Display",serif;font-style:italic;color:var(--muted);margin-left:6px;font-size:.95rem}
 .d{margin:3px 0 0}
 .ex{margin:4px 0 0;font-family:"Playfair Display",serif;font-style:italic;color:var(--ink);opacity:.85}
-.ex::before{content:"« "}.ex::after{content:" »"}
+.ex .n{font-family:"Source Sans 3",sans-serif;font-style:normal;font-weight:600;font-size:.7em;color:var(--accent);vertical-align:.45em;margin-right:3px}
 .or{margin:5px 0 0;font-size:.82rem;color:var(--muted)}
 .or b{font-weight:600}
 .tags{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
@@ -213,7 +213,7 @@ const D = [
 ["caïd","n.m.","Chef de bande, gros dur.","Il joue au caïd devant ses potes.",["personnes"]],
 ["gros bonnet","n.m.","Personnage important, puissant.","Un gros bonnet de la finance.",["personnes","expressions"]],
 ["lascar","n.m.","Gaillard malin, débrouillard ; voyou.","Ces lascars nous ont bien eus.",["personnes"]],
-["racelard","n.m.","Raciste bas de plafond, la plupart du temps inculte, bête, méchant et anonyme, qui passe le plus clair de son temps caché sur Internet pour y vomir ses vaticinations infâmes. Peu lettré et ne maîtrisant ni la syntaxe, ni la grammaire, ni la conjugaison de sa propre langue, il affiche souvent des citations latines en bannière pour se donner un air savant. Ce qui ne trompe tristement que lui-même et ses congénères.","Ce sale racelard se fait appeler \"La Chambre des Dépités\" en ligne. On n'a jamais vu surnom plus seyant. » — « Les vieux racelards daubés Breizhme et Breizhmoi sont dans un bateau. Breizhmoi tombe à l'eau, qui reste ?",["insultes","personnes"],"De « raciste », avec le suffixe péjoratif -ard (comme dans « chauffard », « soûlard »)."],
+["racelard","n.m.","Raciste bas de plafond, la plupart du temps inculte, bête, méchant et anonyme, qui passe le plus clair de son temps caché sur Internet pour y vomir ses vaticinations infâmes. Peu lettré et ne maîtrisant ni la syntaxe, ni la grammaire, ni la conjugaison de sa propre langue, il affiche souvent des citations latines en bannière pour se donner un air savant. Ce qui ne trompe tristement que lui-même et ses congénères.",["Ce sale racelard se fait appeler \"La Chambre des Dépités\" en ligne. On n'a jamais vu surnom plus seyant.","Les vieux racelards daubés Breizhme et Breizhmoi sont dans un bateau. Breizhmoi tombe à l'eau, qui reste ?"],["insultes","personnes"],"De « raciste », avec le suffixe péjoratif -ard (comme dans « chauffard », « soûlard »)."],
 ["racaille","n.f.","Voyou, délinquant (péjoratif).","Une bande de racailles.",["personnes","insultes"]],
 ["zonard","n.m.","Jeune marginal qui traîne sans but.","Des zonards squattaient le hall.",["personnes"]],
 ["loulou","n.m.","Voyou (années 1970-80) ; aussi terme affectueux.","Un loulou de banlieue.",["personnes","ancien"]],
@@ -528,7 +528,7 @@ const esc = s => s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':
 
 const E = D.map(([m,g,d,e,t,o,opt])=>{
   const key = norm(m).replace(/[^a-z0-9 ]/g,"");
-  return {m,g,d,e,t,o,opt:opt||{},id:slug(m),key,letter:key[0].toUpperCase(),hay:norm([m,d,e,o||""].join(" "))};
+  return {m,g,d,e,t,o,opt:opt||{},id:slug(m),key,letter:key[0].toUpperCase(),hay:norm([m,d,[].concat(e||[]).join(" "),o||""].join(" "))};
 }).sort((a,b)=>a.key.localeCompare(b.key,"fr"));
 
 const state = {q:"",letter:null,theme:null};
@@ -547,7 +547,7 @@ function entryHTML(x,q){
   return `<article class="entry" id="${x.id}">
     <a class="hw" href="#${x.id}" data-copy="${x.id}">${hl(x.m,q)}</a><span class="gram">${esc(x.g)}</span>${x.opt.nouveau?'<span class="badge">Nouveau</span>':''}
     <p class="d">${hl(x.d,q)}</p>
-    ${x.e?`<p class="ex">${hl(x.e,q)}</p>`:""}
+    ${(Array.isArray(x.e)?x.e:(x.e?[x.e]:[])).map((t,i,a)=>`<p class="ex">${a.length>1?`<span class="n">${i+1}</span>`:""}« ${hl(t,q)} »</p>`).join("")}
     ${x.o?`<p class="or"><b>Origine :</b> ${esc(x.o)}</p>`:""}
     <div class="tags">${x.t.map(t=>`<button class="tag" data-theme="${t}">${THEMES[t]||t}</button>`).join("")}</div>
   </article>`;
